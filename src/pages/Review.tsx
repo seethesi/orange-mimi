@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useReviewStore, getWeekStart } from '@/stores/reviewStore';
+import { toLocalDate } from '@/lib/dateUtils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 // 极简小周历：月历按周高亮，点击直接跳转该周
@@ -11,7 +12,7 @@ function MiniWeekCalendar({
   onSelectWeek: (weekStart: string) => void;
 }) {
   const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
+  const todayStr = toLocalDate(today);
   const thisWeekStart = getWeekStart();
 
   const [viewYear, setViewYear] = useState(today.getFullYear());
@@ -29,12 +30,12 @@ function MiniWeekCalendar({
 
   for (let i = 0; i < startWeekday; i++) {
     const d = new Date(viewYear, viewMonth, 1 - startWeekday + i);
-    currentWeek.push({ date: d.toISOString().split('T')[0], day: d.getDate(), isCurrentMonth: false });
+    currentWeek.push({ date: toLocalDate(d), day: d.getDate(), isCurrentMonth: false });
   }
 
   for (let day = 1; day <= daysInMonth; day++) {
     const d = new Date(viewYear, viewMonth, day);
-    currentWeek.push({ date: d.toISOString().split('T')[0], day, isCurrentMonth: true });
+    currentWeek.push({ date: toLocalDate(d), day, isCurrentMonth: true });
     if (currentWeek.length === 7) {
       weeks.push(currentWeek);
       currentWeek = [];
@@ -44,7 +45,7 @@ function MiniWeekCalendar({
   if (currentWeek.length > 0) {
     while (currentWeek.length < 7) {
       const d = new Date(viewYear, viewMonth + 1, currentWeek.length + 1);
-      currentWeek.push({ date: d.toISOString().split('T')[0], day: d.getDate(), isCurrentMonth: false });
+      currentWeek.push({ date: toLocalDate(d), day: d.getDate(), isCurrentMonth: false });
     }
     weeks.push(currentWeek);
   }

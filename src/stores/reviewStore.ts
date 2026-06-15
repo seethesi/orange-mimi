@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { WeeklyReview } from '@/types';
+import { toLocalDate } from '@/lib/dateUtils';
 import { useTaskStore } from './taskStore';
 import { useEnergyStore } from './energyStore';
 
@@ -14,7 +15,7 @@ function getWeekStart(date?: Date): string {
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
   const monday = new Date(d);
   monday.setDate(diff);
-  return monday.toISOString().split('T')[0];
+  return toLocalDate(monday);
 }
 
 interface ReviewState {
@@ -81,7 +82,7 @@ export const useReviewStore = create<ReviewState>()(
         // 本周已完成的任务
         const weekEndDate = new Date(weekStart);
         weekEndDate.setDate(weekEndDate.getDate() + 7);
-        const weekEndStr = weekEndDate.toISOString().split('T')[0];
+        const weekEndStr = toLocalDate(weekEndDate);
 
         const weekTasks = taskStore.tasks.filter(
           (t) => t.completed && t.date >= weekStart && t.date < weekEndStr

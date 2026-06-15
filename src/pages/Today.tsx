@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTaskStore } from '@/stores/taskStore';
 import AddTaskModal, { CompleteTaskModal, EditTaskModal } from '@/components/AddTaskModal';
 import { Plus, Check, MoreHorizontal, ChevronDown, ChevronUp, Undo2 } from 'lucide-react';
+import { toLocalDate } from '@/lib/dateUtils';
 import type { DailyTask, TaskCategory } from '@/types';
 
 const categoryLabel: Record<string, string> = {
@@ -27,7 +28,7 @@ export default function Today() {
     cleanup();
   }, [cleanup]);
 
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = toLocalDate(new Date());
   const todayTasks = tasks.filter((t) => !t.completed && t.date === todayStr);
   const completedToday = tasks.filter((t) => t.completed && t.date === todayStr);
   const today = new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });

@@ -3,6 +3,7 @@ import { useOngoingStore } from '@/stores/ongoingStore';
 import { useEnergyStore } from '@/stores/energyStore';
 import { useSentenceStore } from '@/stores/sentenceStore';
 import { useReviewStore } from '@/stores/reviewStore';
+import { toLocalDate } from '@/lib/dateUtils';
 
 interface ExportData {
   version: 1;
@@ -31,7 +32,7 @@ export function exportData(): void {
 
   const a = document.createElement('a');
   a.href = url;
-  const date = new Date().toISOString().split('T')[0];
+  const date = toLocalDate(new Date());
   a.download = `橘猫数据_${date}.json`;
   a.click();
   URL.revokeObjectURL(url);

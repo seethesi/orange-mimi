@@ -2,8 +2,10 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { EnergyRecord, TimeSlot } from '@/types';
 
+import { toLocalDate } from '@/lib/dateUtils';
+
 function getToday(): string {
-  return new Date().toISOString().split('T')[0];
+  return toLocalDate(new Date());
 }
 
 function generateId(): string {
@@ -58,14 +60,14 @@ export const useEnergyStore = create<EnergyState>()(
         const end = new Date(weekStart);
         end.setDate(end.getDate() + 7);
         const startStr = weekStart;
-        const endStr = end.toISOString().split('T')[0];
+        const endStr = toLocalDate(end);
         return get().records.filter((r) => r.date >= startStr && r.date < endStr);
       },
 
       getPreviousWeekRecords: (weekStart) => {
         const prevStart = new Date(weekStart);
         prevStart.setDate(prevStart.getDate() - 7);
-        const prevStartStr = prevStart.toISOString().split('T')[0];
+        const prevStartStr = toLocalDate(prevStart);
         return get().getWeekRecords(prevStartStr);
       },
     }),

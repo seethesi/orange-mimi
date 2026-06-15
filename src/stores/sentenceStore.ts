@@ -2,8 +2,10 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { DailySentence } from '@/types';
 
+import { toLocalDate } from '@/lib/dateUtils';
+
 function getToday(): string {
-  return new Date().toISOString().split('T')[0];
+  return toLocalDate(new Date());
 }
 
 function generateId(): string {
