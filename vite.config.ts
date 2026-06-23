@@ -41,6 +41,20 @@ export default defineConfig(({ command }) => {
             },
           },
         },
+        {
+          entry: 'electron/preload.ts',
+          onstart(args) {
+            args.reload()
+          },
+          vite: {
+            build: {
+              outDir: 'dist-electron',
+              rollupOptions: {
+                external: ['electron'],
+              },
+            },
+          },
+        },
       ]),
     ],
   }

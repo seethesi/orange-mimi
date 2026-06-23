@@ -58,8 +58,16 @@ export default function AddTaskModal({ onClose }: { onClose: () => void }) {
           <>
             <h3 className="text-base font-medium text-[#3D3228] mb-1">{name}</h3>
             <p className="text-xs text-[#A89882] mb-5">选择分类</p>
-            <div className="flex gap-2">
-              {categoryOptions.map((opt) => (
+            <div
+              className="flex gap-2"
+              onKeyDown={(e) => {
+                if (e.key === '1') setCategory('survival');
+                else if (e.key === '2') setCategory('creation');
+                else if (e.key === '3') setCategory('recovery');
+                else if (e.key === 'Enter') handleSubmit();
+              }}
+            >
+              {categoryOptions.map((opt, i) => (
                 <button
                   key={opt.value}
                   onClick={() => setCategory(opt.value)}
@@ -70,6 +78,7 @@ export default function AddTaskModal({ onClose }: { onClose: () => void }) {
                   }`}
                 >
                   {opt.label}
+                  <span className="text-[10px] text-[#C4B8A6] ml-1">{i + 1}</span>
                 </button>
               ))}
             </div>

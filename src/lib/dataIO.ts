@@ -15,8 +15,8 @@ interface ExportData {
   reviews: ReturnType<typeof useReviewStore.getState>['reviews'];
 }
 
-export function exportData(): void {
-  const data: ExportData = {
+function getExportData(): ExportData {
+  return {
     version: 1,
     exportedAt: new Date().toISOString(),
     tasks: useTaskStore.getState().tasks,
@@ -25,7 +25,10 @@ export function exportData(): void {
     sentences: useSentenceStore.getState().sentences,
     reviews: useReviewStore.getState().reviews,
   };
+}
 
+export function exportData(): void {
+  const data = getExportData();
   const json = JSON.stringify(data, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -36,6 +39,22 @@ export function exportData(): void {
   a.download = `橘猫数据_${date}.json`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+/** 桌面端自动导出数据到指定路径 */
+export async function autoExportToDesktop(): Promise<void> {
+  if (!window.electronAPI?.isElectron) return;
+  try {
+    const data = getExportData();
+    const json = JSON.stringify(data, null, 2);
+    // 路径由 Electron 主进程决定，不硬编码在客户端代码中
+    const result = await window.electronAPI.saveDataFile('auto-export', json);
+    if (!result.success) {
+      console.error('自动导出失败:', result.error);
+    }
+  } catch (err) {
+    console.error('自动导出异常:', err);
+  }
 }
 
 export function importData(file: File): Promise<{ success: boolean; message: string }> {

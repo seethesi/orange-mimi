@@ -53,10 +53,10 @@ export default function Sentence() {
             <span className="text-[10px] text-[#C4B8A6]">{content.length}/100</span>
             <button
               onClick={handleSave}
-              disabled={!content.trim() || saved}
+              disabled={!content.trim()}
               className="px-4 py-1.5 rounded-lg bg-[#F97316] text-white text-xs disabled:opacity-30 hover:bg-[#EA6C0A] transition-colors"
             >
-              {saved ? '已保存' : '保存'}
+              {saved ? '更新' : '保存'}
             </button>
           </div>
         </div>
